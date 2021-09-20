@@ -15,7 +15,6 @@ async function handle(req: any, res: any) {
     const newsCollection = db.collection('news');
     
     const result = await newsCollection.find().toArray();
-    console.log('xxx === 3',result)
 
     client.close();
 

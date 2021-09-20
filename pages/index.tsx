@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { NextPage } from 'next'
 import News from './news';
+import { MongoClient } from 'mongodb';
 
 const DAYS: any[] = ['1', '2', '3', '4'];
 
@@ -51,15 +52,17 @@ const Home: NextPage = (props: any) => {
 
 export async function getStaticProps() {
   let newx: any = DAYS;
-  const res = await fetch('http://localhost:3000/api/new-api', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
+  const client = await MongoClient.connect(
+    `mongodb+srv://quangvd7:aq06121997@cluster0.cudps.mongodb.net/test1?retryWrites=true&w=majority`
+  )
 
-
-  const { data } = await res.json();
+  const db = client.db();
+  
+  
+  const newsCollection = db.collection('news');
+  
+  const result = await newsCollection.find().toArray();
+  const data = JSON.parse(JSON.stringify(result))
 
   return {
     props: {
